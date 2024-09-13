@@ -100,7 +100,7 @@ public class Entidad {
     @Column(name = "geolocalizacion",columnDefinition = "geometry")
     private Geometry geometry;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.DETACH,CascadeType.REMOVE},fetch = FetchType.LAZY)
     @JoinTable(name = "entidadpersonal"
             ,joinColumns = @JoinColumn(name = "identidad")
             ,inverseJoinColumns = @JoinColumn(name = "idpersonal")

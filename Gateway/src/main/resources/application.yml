@@ -7,17 +7,15 @@ spring:
         - id: Gestion-Demografia
           uri: http://localhost:8087
           predicates:
-            - Path = /api/v1/gestion/demografia**
+            - Path = /api/v1/gestion/demografia/**
         - id: Gestion-Excel
           uri: http://localhost:8087
           predicates:
-            - Path = /api/v1/gestion/excel**
+            - Path = /api/v1/gestion/excel/**
         - id: Gestion-Municipio
           uri: http://localhost:8087
           predicates:
             - Path=/api/v1/gestion/municipio/**
-          filters:
-            - name: TokenFilter
         - id: Gestion-Provincia
           uri: http://localhost:8087
           predicates:

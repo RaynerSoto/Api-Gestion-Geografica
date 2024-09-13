@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Comparator;
 import java.util.List;
-
+// Area de salud ya funciona
 @RestController
 @RequestMapping(path = "/api/v1/gestion/areaSalud")
 @Tag(name = "Controlador del área de salud"

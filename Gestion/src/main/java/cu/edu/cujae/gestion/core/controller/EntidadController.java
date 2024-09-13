@@ -5,6 +5,7 @@ import cu.edu.cujae.gestion.core.dto.EntidadDto;
 import cu.edu.cujae.gestion.core.dto.TokenDto;
 import cu.edu.cujae.gestion.core.dto.UsuarioDto;
 import cu.edu.cujae.gestion.core.feignclient.TokenServiceInterfaces;
+import cu.edu.cujae.gestion.core.mapper.Empleado;
 import cu.edu.cujae.gestion.core.utils.IpUtils;
 import cu.edu.cujae.gestion.core.utils.RegistroUtils;
 import cu.edu.cujae.gestion.core.utils.TokenUtils;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Totalmente probada
 @RestController
 @RequestMapping(value = "/api/v1/gestion/entidad",name = "Controller para las entidades")
 @Tag(name = "Controllador de la entidad"

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Comparator;
 import java.util.List;
-
+// Provincia ya funciona
 @RestController
 @RequestMapping("/api/v1/gestion/provincia")
 @Tag(name = "Controllador de provincias",

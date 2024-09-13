@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Comparator;
 import java.util.List;
-
+// Zona de Transpore funciona
 @RestController
 @RequestMapping("/api/v1/gestion/zonaTransporte")
 @Tag(name = "Controllador de zona de transporte")

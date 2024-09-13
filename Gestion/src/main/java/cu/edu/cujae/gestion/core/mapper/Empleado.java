@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Geometry;
+import org.springframework.beans.Mergeable;
 
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class Empleado {
     @Column(name = "geolocalizacion",columnDefinition = "geometry")
     private Geometry geometry;
 
-    @ManyToMany(mappedBy = "personal")
+    @ManyToMany(mappedBy = "personal",cascade = {CascadeType.MERGE,CascadeType.REFRESH,CascadeType.DETACH,CascadeType.REMOVE})
     private List<Entidad> entidades;
 
     public Empleado(EmpleadoDto empleadoDto, Municipio municipio, Provincia provincia){
@@ -107,5 +108,10 @@ public class Empleado {
         this.direccion = empleadoDto.getDireccion();
         this.datos = empleadoDto.getDatos();
         this.entidades = List.of(entidad);
+    }
+
+    @PreRemove
+    public void preRemove(){
+        this.getEntidades().clear();
     }
 }

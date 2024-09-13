@@ -6,6 +6,8 @@ import cu.edu.cujae.gestion.core.dto.empleadoDtos.EmpleadoDto;
 import cu.edu.cujae.gestion.core.dto.empleadoDtos.EmpleadoDtoInsert;
 import cu.edu.cujae.gestion.core.dto.empleadoDtos.EmpleadoDtoRegular;
 import cu.edu.cujae.gestion.core.feignclient.TokenServiceInterfaces;
+import cu.edu.cujae.gestion.core.mapper.Empleado;
+import cu.edu.cujae.gestion.core.mapper.Entidad;
 import cu.edu.cujae.gestion.core.utils.IpUtils;
 import cu.edu.cujae.gestion.core.utils.RegistroUtils;
 import cu.edu.cujae.gestion.core.utils.TokenUtils;
@@ -109,7 +111,7 @@ public class EmpleadoController {
         }
     }
 
-    @GetMapping("/{ci}")
+    @PatchMapping("/ci/{ci}")
     @Operation(summary = "Obtener empleado por CI",
     description = "Permite obtener un empleado a raíz de su carnet de identidad",security = { @SecurityRequirement(name = "bearer-key") })
     @PreAuthorize(value = "hasAnyRole('Super Administrador','Administrador','Gestor')")
@@ -126,7 +128,7 @@ public class EmpleadoController {
         }
     }
     
-    @GetMapping("/{id}")
+    @PatchMapping("/id/{id}")
     @Operation(summary = "Obtener empleado por ID",
             description = "Permite obtener un empleado a raíz de su ID",
             security = { @SecurityRequirement(name = "bearer-key") })
@@ -161,7 +163,7 @@ public class EmpleadoController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     @Operation(summary = "Eliminar empleado por ID",
             description = "Permite eliminar un empleado a raíz de su ID",security = { @SecurityRequirement(name = "bearer-key") })
     @PreAuthorize(value = "hasAnyRole('Super Administrador','Administrador','Gestor')")
@@ -169,6 +171,15 @@ public class EmpleadoController {
         String actividad = "Eliminar un empleado a raíz de su ID";
         TokenDto tokenDto = TokenUtils.getTokenDto(request);
         try {
+            Empleado empleado = empleadoService.obtenerEmpleadoXId(id).get();
+            List<Entidad> entidads = empleado.getEntidades();
+            for (Entidad entidad: entidads){
+                for (int contador = 0; contador<entidad.getPersonal().size();contador++){
+                    if (entidad.getPersonal().get(contador).getUuid() == id)
+                        entidad.getPersonal().remove(contador);
+                }
+                entidadService.modificarEntidad(entidad);
+            }
             empleadoService.eliminarEmpleado(id);
             registroUtils.insertarRegistro(mapper.convertValue(tokenService.tokenExists(tokenDto).getBody(), UsuarioDto.class).getUsername(),actividad,IpUtils.hostIpV4Http(request),"Aceptado",null);
             return ResponseEntity.ok("Empleado eliminado");
@@ -178,7 +189,7 @@ public class EmpleadoController {
         }
     }
 
-    @DeleteMapping("/{ci}")
+    @DeleteMapping("/ci/{ci}")
     @Operation(summary = "Eliminar empleado por CI",
             description = "Permite eliminar un empleado a raíz de su carnet de identidad",security = { @SecurityRequirement(name = "bearer-key") })
     @PreAuthorize(value = "hasAnyRole('Super Administrador','Administrador','Gestor')")
@@ -186,6 +197,15 @@ public class EmpleadoController {
         String actividad = "Eliminar un empleado a raìz de su carnet de identidad";
         TokenDto tokenDto = TokenUtils.getTokenDto(request);
         try {
+            Empleado empleado = empleadoService.obtenerEmpleadoXCi(ci).get();
+            List<Entidad> entidads = empleado.getEntidades();
+            for (Entidad entidad: entidads){
+                for (int contador = 0; contador<entidad.getPersonal().size();contador++){
+                    if (entidad.getPersonal().get(contador).getCi().equals(ci))
+                        entidad.getPersonal().remove(contador);
+                }
+                entidadService.modificarEntidad(entidad);
+            }
             empleadoService.eliminarEmpleado(ci);
             registroUtils.insertarRegistro(mapper.convertValue(tokenService.tokenExists(tokenDto).getBody(), UsuarioDto.class).getUsername(),actividad,IpUtils.hostIpV4Http(request),"Aceptado",null);
             return ResponseEntity.ok("Empleado eliminado");

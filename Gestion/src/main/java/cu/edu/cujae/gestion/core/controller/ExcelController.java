@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.ArrayList;
 
+// Excel comprobado
 @RestController
 @RequestMapping("/api/v1/gestion/excel")
 @Tag(name = "Controlador del trabajo con el Excel"
