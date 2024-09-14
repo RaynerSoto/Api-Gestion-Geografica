@@ -4,14 +4,10 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: Gestion-Demografia
+        - id: Excel
           uri: http://localhost:8087
           predicates:
-            - Path = /api/v1/gestion/demografia/**
-        - id: Gestion-Excel
-          uri: http://localhost:8087
-          predicates:
-            - Path = /api/v1/gestion/excel/**
+            - Path=/api/v1/gestion/excel/**
         - id: Gestion-Municipio
           uri: http://localhost:8087
           predicates:

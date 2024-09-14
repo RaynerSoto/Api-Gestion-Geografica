@@ -154,7 +154,7 @@ public class EmpleadoController {
         String actividad = "Modificar un empleado a raìz de su ID";
         TokenDto tokenDto = TokenUtils.getTokenDto(request);
         try {
-
+            //Modificar empleado
             registroUtils.insertarRegistro(mapper.convertValue(tokenService.tokenExists(tokenDto).getBody(), UsuarioDto.class).getUsername(),actividad,IpUtils.hostIpV4Http(request),"Aceptado",null);
             return ResponseEntity.ok("Usuario insertado con éxito");
         }catch (Exception e){
@@ -212,6 +212,31 @@ public class EmpleadoController {
         }catch (Exception e){
             registroUtils.insertarRegistro(mapper.convertValue(tokenService.tokenExists(tokenDto).getBody(), UsuarioDto.class).getUsername(),actividad,IpUtils.hostIpV4Http(request),"Rechazado",e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/desacoplar/{id1}/{id2}")
+    @Operation(summary = "Desacoplar empleado de la entidad",
+            description = "Desacoplar empleado de la entidad por ambos ID",security = { @SecurityRequirement(name = "bearer-key") })
+    @PreAuthorize(value = "hasAnyRole('Super Administrador','Administrador','Gestor')")
+    public ResponseEntity<?> desacomplarEmpleado(@PathVariable Long id1,@PathVariable Long id2,HttpServletRequest request){
+        String actividad = "Desacoplar empleado de la entidad";
+        TokenDto tokenDto = TokenUtils.getTokenDto(request);
+        try {
+            Entidad entidads = entidadService.obtenerEntidadID(id2).get();
+            for (Empleado empleado: entidads.getPersonal()){
+                System.out.println(empleado.getUuid());
+                if (empleado.getUuid() == id1){
+                    entidads.getPersonal().remove(empleado);
+                    break;
+                }
+            }
+            entidadService.modificarEntidad(entidads);
+            registroUtils.insertarRegistro(mapper.convertValue(tokenService.tokenExists(tokenDto).getBody(), UsuarioDto.class).getUsername(),actividad,IpUtils.hostIpV4Http(request),"Aceptado",null);
+            return ResponseEntity.ok("Usuario desacoplado");
+        }catch (Exception e){
+            registroUtils.insertarRegistro(mapper.convertValue(tokenService.tokenExists(tokenDto).getBody(), UsuarioDto.class).getUsername(),actividad,IpUtils.hostIpV4Http(request),"Rechazado",e.getMessage());
+            return ResponseEntity.badRequest().body("No ha sido posible desacoplar el usuario");
         }
     }
 }
