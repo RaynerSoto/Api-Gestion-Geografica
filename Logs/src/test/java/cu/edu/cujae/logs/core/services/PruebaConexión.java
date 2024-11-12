@@ -22,4 +22,15 @@ public class PruebaConexión {
         CoordenadasIp cor = new Gson().fromJson(response.body(), CoordenadasIp.class);
         System.out.println(cor);
     }
+
+    @Test
+    public void testService() throws IOException, InterruptedException {
+        String ip = "152.207.224.73";
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:8087/api/v1/geoIp/?ip="+ip)).build();
+        HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        CoordenadasIp cor = new Gson().fromJson(response.body(), CoordenadasIp.class);
+        System.out.println(cor);
+    }
 }

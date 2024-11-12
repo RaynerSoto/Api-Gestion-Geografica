@@ -15,8 +15,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("Gestion API").version("1.0.0").contact(
-                        new Contact().name("Rayner Alejandro Soto Martínez").email("raynersoto01@gmail.com"))
-                        .license(new License().name("Apache 2.0")))
+                        new Contact().name("Rayner Alejandro Soto Martínez").email("raynersoto01@gmail.com")))
                 .components(new Components().addSecuritySchemes("bearer-key",new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
     }
 
